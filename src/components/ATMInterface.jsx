@@ -15,18 +15,7 @@ export default function ATMInterface({ onSubmit }) {
     return () => tl.kill();
   }, []);
 
-  useEffect(() => {
-    if (cardInserted) {
-      gsap.fromTo(screenRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.5 }
-      );
-      gsap.fromTo(keypadRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5, delay: 0.3 }
-      );
-    }
-  }, [cardInserted]);
+
 
   const handleKeyPress = (key) => {
     if (key === 'C') {
@@ -91,12 +80,10 @@ export default function ATMInterface({ onSubmit }) {
           }}>v2.4.1</span>
         </div>
 
-        {/* Screen area */}
-        <div className="atm-screen" style={{ margin: '1.25rem', minHeight: '160px' }}>
           {!cardInserted ? (
             <div style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center',
-              justifyContent: 'center', height: '140px', gap: '1.5rem',
+              justifyContent: 'center', padding: '2rem', gap: '1.5rem',
             }}>
               <div style={{
                 fontFamily: 'var(--font-mono)', color: 'var(--accent-cyan)',
@@ -134,38 +121,29 @@ export default function ATMInterface({ onSubmit }) {
               </div>
             </div>
           ) : (
-            <div ref={screenRef} style={{ opacity: 0 }}>
-              <div style={{
-                fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
-                color: 'var(--text-secondary)', marginBottom: '0.75rem',
+            <div style={{ padding: '1.5rem' }}>
+              <p style={{
+                fontFamily: 'var(--font-mono)', fontSize: '0.75rem',
+                color: '#94a3b8', marginBottom: '0.75rem',
+                letterSpacing: '0.1em',
               }}>
                 ENTER AMOUNT (₹)
-              </div>
-              <div style={{
-                fontFamily: 'var(--font-mono)', fontSize: '2rem', fontWeight: 700,
-                color: amount ? 'var(--accent-cyan)' : 'rgba(100,116,139,0.4)',
-                textShadow: amount ? '0 0 20px rgba(6, 214, 160, 0.4)' : 'none',
-                minHeight: '50px',
-                display: 'flex', alignItems: 'center',
-                borderBottom: '2px solid rgba(6, 214, 160, 0.2)',
-                paddingBottom: '0.5rem',
-                marginBottom: '0.75rem',
-              }}>
+              </p>
+              <div className={`atm-amount ${amount ? 'has-value' : ''}`}>
                 ₹{amount || '0'}
               </div>
-              <div style={{
+              <p style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.65rem',
-                color: 'var(--text-secondary)',
+                color: '#94a3b8',
               }}>
                 BALANCE: ₹98,450.00
-              </div>
+              </p>
             </div>
           )}
-        </div>
 
         {/* Keypad */}
         {cardInserted && (
-          <div ref={keypadRef} style={{ padding: '0 1.25rem 1.25rem', opacity: 0 }}>
+          <div ref={keypadRef} style={{ padding: '0 1.25rem 1.25rem', animation: 'slideUp 0.5s ease 0.3s both' }}>
             <div style={{
               display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
               gap: '0.5rem', marginBottom: '0.75rem',
@@ -178,7 +156,7 @@ export default function ATMInterface({ onSubmit }) {
                   style={{
                     width: '100%',
                     color: key === 'C' ? 'var(--accent-amber)' :
-                           key === '⌫' ? 'var(--accent-red)' : 'var(--text-primary)',
+                      key === '⌫' ? 'var(--accent-red)' : 'var(--text-primary)',
                   }}
                 >
                   {key}
